@@ -88,6 +88,7 @@ public class membershipServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String url = "";
+        String message = "";
         if(user == null) {
             Cookie[] cookies = request.getCookies();
             String emailCookie = CookieUtil.getCookieValue(cookies, "emailAddress");
@@ -103,12 +104,18 @@ public class membershipServlet extends HttpServlet {
             //if cookie exists, create user object and go to homepage
             else {
                 String path = getServletContext().getRealPath("/database.txt");
-                System.out.println(path);
+                //System.out.println(path);
                 user = UserDB.select(emailCookie, path);
-                System.out.println("Email & path: " + emailCookie + path);
+                //System.out.println("Email & path: " + emailCookie + path);
                 session.setAttribute("user", user);
                 session.setMaxInactiveInterval(60*60*24*365);
-                url = "/home.jsp";
+                if(checkPassword(user, emailCookie, passwordCookie)) {
+                    url = "/home.jsp";
+                }
+                else {
+                    message = "No user found. Username/Password is incorrect.";
+                }
+                //url = "/home.jsp";
             }
         }
         //if user object exists, go to homepage
@@ -176,6 +183,15 @@ public class membershipServlet extends HttpServlet {
         //else {
             //return "/signup.jsp";
         //}
+    }
+    
+    public boolean checkPassword(User user, String emailAddress, String password) {
+        if(user.getPassword().equals(password)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /*public String validateForm(String emailAddress, String password,

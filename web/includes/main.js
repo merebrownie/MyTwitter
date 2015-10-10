@@ -2,14 +2,26 @@
  All your JS code must be here.
  */
 
-window.onload = function() {
-    
-};
-
 function checkCookie() {
-    if(document.cookie.indexOf("emailAddress=") < 0) {
+    if(document.cookie.indexOf("emailAddress=") > 0) {
         window.location.replace("login.jsp");
     }
+}
+
+function checkPassword() {
+    //if(document.cookie.test(document.login.password.value) || password == 
+            //document.login.emailAddress.value) {
+    if(document.cookie.indexOf(document.login.email.value) > 0) {
+        if(document.cookie.indexOf(document.login.password.value) > 0) {
+            window.location.replace("home.jsp");
+            return true;
+        } else {
+            alert("No user found. Username/Password is incorrect.");
+            alert(document.cookie + "" + document.login.password.value);
+            return false;
+        }
+    }
+    
 }
 
 function validateForm() {

@@ -12,13 +12,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="styles/main.css" rel="stylesheet" type="text/css"/>
+        <script src="includes/main.js" type="text/javascript"></script>
         <title>MyTwitter | Login</title>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
         <h1>Log in</h1>
         <div id="message"></div>
-        <form name="login" action="membership" method="post">
+        <form name="login" action="membership" method="post" onsubmit="return checkPassword()">
             <input type="hidden" name="action" value="login">
             <input type="email" name="email" value="${user.emailAddress}" placeholder="email or username" required><br>
             <input type="password" name="password" value="${user.password}" placeholder="password" required><br>
