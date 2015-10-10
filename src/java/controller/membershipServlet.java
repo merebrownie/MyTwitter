@@ -98,11 +98,11 @@ public class membershipServlet extends HttpServlet {
             //if cookie doesn't exist, go to signup page
             if(emailCookie == null || emailCookie.equals("") ||
                     passwordCookie == null || passwordCookie.equals("")) {
-                url = "signup.jsp";
+                url = "/signup.jsp";
             }
             //if cookie exists, create user object and go to homepage
             else {
-                String path = getServletContext().getRealPath("/web/database.txt");
+                String path = getServletContext().getRealPath("/database.txt");
                 System.out.println(path);
                 user = UserDB.select(emailCookie, path);
                 System.out.println("Email & path: " + emailCookie + path);
@@ -146,7 +146,7 @@ public class membershipServlet extends HttpServlet {
         //save user data to file if the user doesn't already exist
         String path = getServletContext().getRealPath("/database.txt");
         UserDB.insert(user, path);
-        String message = "User already exists.";
+        //String message = "User already exists.";
         //System.out.println(message);
                
         //store the user object as a session attribute
@@ -167,15 +167,15 @@ public class membershipServlet extends HttpServlet {
         response.addCookie(emailCookie);
         response.addCookie(passwordCookie);
         
-        System.out.println(message);
+        //System.out.println(message);
         //redirect to home page
         //return "/home.jsp";
-        if(message.equals("")) {
+        //if(message.equals("")) {
             return "/home.jsp";
-        }
-        else {
-            return "/signup.jsp";
-        }
+        //}
+        //else {
+            //return "/signup.jsp";
+        //}
     }
 
     /*public String validateForm(String emailAddress, String password,
