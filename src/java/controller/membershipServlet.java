@@ -87,7 +87,8 @@ public class membershipServlet extends HttpServlet {
             throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        String url = "";
+        //String url = "";
+        String url = null;
         String message = "";
         if(user == null) {
             Cookie[] cookies = request.getCookies();

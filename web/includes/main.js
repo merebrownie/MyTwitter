@@ -9,10 +9,14 @@ function checkCookie() {
 }
 
 function checkPassword() {
+    alert("Checking password.");
     //if(document.cookie.test(document.login.password.value) || password == 
             //document.login.emailAddress.value) {
     if(document.cookie.indexOf(document.login.email.value) > 0) {
+        alert(document.cookie + "" + document.login.email.value);
         if(document.cookie.indexOf(document.login.password.value) > 0) {
+            alert(document.cookie + "" + document.login.password.value);
+            alert("Correct password. Logging in...");
             window.location.replace("home.jsp");
             return true;
         } else {
@@ -21,7 +25,7 @@ function checkPassword() {
             return false;
         }
     }
-    
+    alert("Password checked.");
 }
 
 function validateForm() {
