@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 import business.User;
 import murach.util.CookieUtil;
 import dataaccess.UserDB;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
@@ -66,7 +66,6 @@ public class membershipServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String action = request.getParameter("action");
-        
         //perform action and set url to appropriate page
         //String url = "/home.jsp";
         String url = "";
@@ -75,55 +74,88 @@ public class membershipServlet extends HttpServlet {
         } else if (action.equals("signup")) {
             url = signup(request, response);
         }
-        
+        System.out.println(url);
         //forward to the view
         getServletContext()
             .getRequestDispatcher(url)
             .forward(request, response);
-        
+            //System.out.println(request + " " + response);
     }
     
     private String login(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         HttpSession session = request.getSession();
+        // Get user object if it exists
         User user = (User) session.getAttribute("user");
-        //String url = "";
-        String url = null;
+        System.out.println(user);
+        if(user != null) {
+            System.out.println("Login: " + user.getEmailAddress() + user.getPassword());
+        }
+        String emailAddress = request.getParameter("emailAddress");
+        String password = request.getParameter("password");
+        //System.out.println("Login: " + emailAddress + " " + password);
+        String url = "/signup.jsp";
         String message = "";
+        //System.out.println("login: " + user + " " + user.getEmailAddress() + " " + user.getPassword());
+        // If the user does not already exist
         if(user == null) {
-            Cookie[] cookies = request.getCookies();
+            // Get the path of the database.txt file
+            String path = getServletContext().getRealPath("/database.txt");
+            // Select the user object
+            user = UserDB.select(emailAddress, path);
+            System.out.println("Post select: " + user.getEmailAddress());
+            session.setAttribute("user", user);
+            //session.setMaxInactiveInterval(60*60*24*365);
+            session.setMaxInactiveInterval(-1);
+            if(checkCredentials(user, emailAddress, password)) {
+                url = "/home.jsp";
+            } else {
+                message = "No user found. Username/Password is incorrect.";
+                url = "/login.jsp";
+            }
+            request.setAttribute("message", message);
+
+            //url = "/home.jsp";
+            //check cookies for login info
+            /*Cookie[] cookies = request.getCookies();
             String emailCookie = CookieUtil.getCookieValue(cookies, "emailAddress");
-            //System.out.println(emailAddress);
+            System.out.println("COOKIE: " + emailCookie);
             String passwordCookie = CookieUtil.getCookieValue(cookies, "password");
-            //System.out.println(password);
+            System.out.println("COOKIE: " + passwordCookie);
             
             //if cookie doesn't exist, go to signup page
             if(emailCookie == null || emailCookie.equals("") ||
                     passwordCookie == null || passwordCookie.equals("")) {
                 url = "/signup.jsp";
+                message = "Cookie does not exist.";
+                //return url;
             }
             //if cookie exists, create user object and go to homepage
             else {
+                // Get the path of the database.txt file
                 String path = getServletContext().getRealPath("/database.txt");
-                //System.out.println(path);
-                user = UserDB.select(emailCookie, path);
-                //System.out.println("Email & path: " + emailCookie + path);
+                // Select the user object
+                user = UserDB.select(emailAddress, path);
+                System.out.println("Post select: " + user.getEmailAddress());
                 session.setAttribute("user", user);
                 session.setMaxInactiveInterval(60*60*24*365);
-                if(checkPassword(user, emailCookie, passwordCookie)) {
+                if(checkCredentials(user, emailAddress, password)) {
                     url = "/home.jsp";
                 }
                 else {
                     message = "No user found. Username/Password is incorrect.";
                 }
                 //url = "/home.jsp";
-            }
+                //request.setAttribute("message", message);
+            */
         }
-        //if user object exists, go to homepage
+        //if user object exists
         else {
+            //System.out.println(user.getEmailAddress() + " " + user.getPassword());
             url = "/home.jsp";        
         }
-    return url;
+        //request.setAttribute("message", message);
+        return url;
     }
     
     private String signup(HttpServletRequest request, HttpServletResponse response)
@@ -151,21 +183,22 @@ public class membershipServlet extends HttpServlet {
         /*String message = validateForm(emailAddress, password, fullName, 
                 birthmonth, birthdate, birthyear, nickname);*/
                 
-        //save user data to file if the user doesn't already exist
+        // save user data to file if the user doesn't already exist
         String path = getServletContext().getRealPath("/database.txt");
         UserDB.insert(user, path);
-        //String message = "User already exists.";
+        String message = "";
+        //message = "User already exists.";
         //System.out.println(message);
                
-        //store the user object as a session attribute
+        // store the user object as a session attribute
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         
-        //create the Date object & store it in the request
+        // create the Date object & store it in the request
         Date currentDate = new Date();
         request.setAttribute("currentDate", currentDate);
         
-        //add a cookie that stores the user's email & password to the browser
+        // add a cookie that stores the user's email & password to the browser
         Cookie emailCookie = new Cookie("emailAddress", emailAddress);
         Cookie passwordCookie = new Cookie("password", password);
         emailCookie.setMaxAge(60*60*24*365);
@@ -176,66 +209,33 @@ public class membershipServlet extends HttpServlet {
         response.addCookie(passwordCookie);
         
         //System.out.println(message);
-        //redirect to home page
         //return "/home.jsp";
-        //if(message.equals("")) {
+        if(message.equals("")) {
+            // redirect to home page
             return "/home.jsp";
-        //}
-        //else {
-            //return "/signup.jsp";
-        //}
-    }
-    
-    public boolean checkPassword(User user, String emailAddress, String password) {
-        if(user.getPassword().equals(password)) {
-            return true;
         }
         else {
+            request.setAttribute("message", message);
+            return "/signup.jsp";
+        }
+    }
+    
+    public boolean checkCredentials(User user, String emailAddress, String password) {
+        if(user.getEmailAddress().equalsIgnoreCase(emailAddress)) {
+            if(user.getPassword().equals(password)) {
+            System.out.println("Correct credentials. Logging in...");
+            return true;
+            }
+            else {
+                System.out.println("Incorrect password.");
+                return false;
+            }
+        } else {
+            System.out.println("Incorrect email address.");
             return false;
         }
     }
-
-    /*public String validateForm(String emailAddress, String password,
-            String fullName, String birthmonth, String birthdate,
-            String birthyear, String nickname) {
-        //validate parameters
-        String message = "";
-        if(emailAddress.equals("") || fullName.equals("") || nickname.equals("")) {
-            message += "All fields are required. ";
-        }
-        if(password.length() < 7) {
-            message += "Password must be at least 7 characters. ";
-        }
         
-        if(birthmonth.equals("2")) {
-            if(birthdate.equals("29") || birthdate.equals("30")) {
-                if(birthdate.equals("29")) {
-                    if(birthyear.equals("1980") || birthyear.equals("1984") || 
-                    birthyear.equals("1988") || birthyear.equals("1992") || 
-                    birthyear.equals("1996") || birthyear.equals("2000") || 
-                    birthyear.equals("2004") || birthyear.equals("2008") || 
-                    birthyear.equals("2012") || birthyear.equals("2016")) {
-                        message += "Invalid birthdate. ";
-                } else {
-                        message += "Invalid birthdate. ";
-                    }
-                }
-            }
-        }
-            
-        if(birthdate.equals("31")) {
-            if(birthmonth.equals("2") || birthmonth.equals("4") || 
-                    birthmonth.equals("6") || birthmonth.equals("9") || 
-                    birthmonth.equals("11")) {
-                message += "Invalid birthdate. ";
-            }
-        }
-        
-        if((emailAddress.contains("@") == false) || emailAddress.contains(".") == false) {
-            message += "Invalid email address. ";
-        }
-        return message;
-    }*/
     
     
     /**

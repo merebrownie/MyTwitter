@@ -20,7 +20,6 @@ public class User implements Serializable {
     private String birthyear;
     private String nickname;
     
-    //define set/get methods for all attributes.
     public User() {
         fullName = "";
         emailAddress = "";
@@ -42,6 +41,7 @@ public class User implements Serializable {
         this.password = password;
     }
     
+    //define set/get methods for all attributes.
     public String getFullName() {
         return fullName;
     }
