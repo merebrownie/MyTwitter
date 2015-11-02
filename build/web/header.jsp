@@ -10,23 +10,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <title>Header | MyTwitter</title>
     </head>
     <body>
-        <c:choose>
-            <c:when test="${user.emailAddress == ''}">
-                <p>Oops</p>
-            </c:when>
-            <c:when test="${user.emailAddress != ''}">
-                <label>Name: </label>
-                <c:out value="${user.fullName}"></c:out>
-                <label>E-mail: </label>
-                <c:out value="${user.emailAddress}"></c:out>
-            </c:when>
-        </c:choose>
-        <c:if test="${user.emailAddress == ''}">
-            <c:out value="${user.fullName}"/>
-            <c:out value="${user.emailAddress}"/>
-        </c:if>
+        <a href="home.jsp">Home</a> | 
+        Notifications | 
+        <a href="signup.jsp">Profile</a>
     </body>
 </html>

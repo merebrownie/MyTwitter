@@ -2,6 +2,24 @@
  All your JS code must be here.
  */
 
+function changeColor() {
+    alert("looking..");
+    var tweet;
+    var tweets = document.getElementsByClassName("tweet");
+    alert(tweets.length);
+    for(i = 0; i < tweets.length; i++) {
+        tweet = tweets.item(i);
+        alert(tweet);
+        var startMention = tweets.indexOf("@") + 1;
+        var endMention = tweets.indexOf(" ", startMention);
+        alert(startMention + "" + endMention);
+        var textToChange = tweet.substring(startMention, endMention);
+        textToChange.style.color = "blue";
+        alert(textToChange);
+    }
+    
+}
+
 function checkCookie() {
     if(document.cookie.indexOf("emailAddress=") > 0) {
         window.location.replace("login.jsp");

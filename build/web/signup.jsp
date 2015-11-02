@@ -9,7 +9,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <script src="includes/main.js" type="text/javascript"></script>
         <title>MyTwitter | Signup</title>
@@ -22,9 +23,11 @@
             <label>Full Name:</label>
                 <input type="text" name="fullName" value="${user.fullName}" required><br>
             <label>Nickname: </label>
-                <input type="text" name="nickname" value="${user.nickname}" required><br>
+                <!--<input type="text" name="nickname" value="${user.nickname}" required><br>-->
+                <input type="text" name="nickname" value="${user.nickname}" disabled><br>
             <label>E-mail Address: </label>
-                <input type="email" name="emailAddress" value="${user.emailAddress}" required><br>
+                <!--<input type="email" name="emailAddress" value="${user.emailAddress}" required><br>-->
+                <input type="email" name="emailAddress" value="${user.emailAddress}" disabled><br>
             <label>Birthdate: </label>
             <select name="birthmonth" required value="${user.birthmonth}">
                 <option value="1" selected>1</option>

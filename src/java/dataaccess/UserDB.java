@@ -79,4 +79,38 @@ public class UserDB {
         }
         
     }
+    
+    public static boolean update(User user, String filepath, String password, String fullName, 
+            String birthmonth, String birthdate, String birthyear) {
+        try {
+            String oldPassword = user.getPassword();
+            String oldFullName = user.getFullName();
+            String oldBirthmonth = user.getBirthmonth();
+            String oldBirthdate = user.getBirthdate();
+            String oldBirthyear = user.getBirthyear();
+            user.setPassword(password);
+            user.setFullName(fullName);
+            user.setBirthmonth(birthmonth);
+            user.setBirthdate(birthdate);
+            user.setBirthyear(birthyear);
+            try {
+                //File file = new File(filepath);
+                //BufferedReader in = new BufferedReader(new FileReader(file));
+                BufferedReader file = new BufferedReader(new FileReader(filepath));
+                String line;
+                String input = "";
+                while ((line = file.readLine()) != null) {
+                    input += line + "/n";
+                }
+                file.close();
+                System.out.println(input);
+                //if(input.contains(line))
+            } catch (Exception e) {
+            
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

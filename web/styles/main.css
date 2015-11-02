@@ -19,9 +19,6 @@ input[type="submit"], input[type="reset"] {
     border-radius: 10px;
 }
 
-textarea {
-    width = 800px;
-}
 /* The styles for the classes */
 
 /* The styles for the specific elements (by Id) */
@@ -33,11 +30,11 @@ textarea {
 
 #footer {
     /*background-color: #cccccc;*/
-    height: 50px;
+    /*height: 50px;
     font-size: 14px;
     position: absolute;
     bottom: 5px;
     width: 600px;
-    padding: 5px;
+    padding: 5px;*/
 }
 
