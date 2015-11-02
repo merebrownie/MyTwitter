@@ -11,10 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import business.User;
-import murach.util.CookieUtil;
 import dataaccess.UserDB;
 //import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
@@ -75,6 +74,13 @@ public class membershipServlet extends HttpServlet {
             url = signup(request, response);
         }
         System.out.println(url);
+        
+        //create users list and store it in the session
+        String path = getServletContext().getRealPath("/WEB-INF/database.txt");
+        ArrayList<User> users = UserDB.selectAll(path);
+        HttpSession session = request.getSession();
+        session.setAttribute("users", users);
+
         //forward to the view
         getServletContext()
             .getRequestDispatcher(url)
@@ -100,7 +106,7 @@ public class membershipServlet extends HttpServlet {
         // If the user does not already exist
         if(user == null) {
             // Get the path of the database.txt file
-            String path = getServletContext().getRealPath("/database.txt");
+            String path = getServletContext().getRealPath("/WEB-INF/database.txt");
             // Select the user object
             user = UserDB.select(emailAddress, path);
             System.out.println("Post select: " + user.getEmailAddress());
@@ -184,7 +190,7 @@ public class membershipServlet extends HttpServlet {
                 birthmonth, birthdate, birthyear, nickname);*/
                 
         // save user data to file if the user doesn't already exist
-        String path = getServletContext().getRealPath("/database.txt");
+        String path = getServletContext().getRealPath("/WEB-INF/database.txt");
         UserDB.insert(user, path);
         String message = "";
         //message = "User already exists.";

@@ -45,6 +45,10 @@
                     
                 <aside id="follow"class ="col-md-3">
                     <h3>Who to follow</h3>
+                    <c:forEach var="user" items="${users}">
+                        <c:out value="${user.fullName}"></c:out>
+                        [@<c:out value="${user.nickname}"></c:out>]
+                    </c:forEach>
                 </aside>
             </div>
             <div class="row">

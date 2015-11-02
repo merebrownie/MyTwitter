@@ -75,7 +75,7 @@ public class tweetServlet extends HttpServlet {
                         
             // store data in a tweet object and save to file
             Tweet tweet = new Tweet(emailAddress, date, text);
-            String path = getServletContext().getRealPath("/tweet.txt");
+            String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
             TweetDB.insert(tweet, path);
             
             //set Tweet object in request object and set URL
@@ -83,7 +83,7 @@ public class tweetServlet extends HttpServlet {
             url = "/home.jsp";
             }
         // create tweets list & store it in the session
-        String path = getServletContext().getRealPath("/tweet.txt");
+        String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
         ArrayList<Tweet> tweets = TweetDB.search(path);
         HttpSession session = request.getSession();
         session.setAttribute("tweets", tweets);

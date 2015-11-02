@@ -80,6 +80,32 @@ public class UserDB {
         
     }
     
+    public static ArrayList<User> selectAll(String filename) throws IOException {
+        ArrayList<User> users = new ArrayList<User>();
+        BufferedReader in = new BufferedReader(new FileReader(filename));
+        String line = in.readLine();
+        while (line != null) {
+            try {
+                StringTokenizer t = new StringTokenizer(line, "|");
+                String emailAddress = t.nextToken();
+                String password = t.nextToken();
+                String fullName = t.nextToken();
+                String birthmonth = t.nextToken();
+                String birthdate = t.nextToken();
+                String birthyear = t.nextToken();
+                String nickname = t.nextToken();
+                User user = new User(emailAddress, password, fullName, birthmonth,
+                birthdate, birthyear, nickname);
+                users.add(user);
+                line = in.readLine();
+            } catch (NoSuchElementException e) {
+                line = in.readLine();
+            }
+        }
+        in.close();
+        return users;
+    }
+    
     public static boolean update(User user, String filepath, String password, String fullName, 
             String birthmonth, String birthdate, String birthyear) {
         try {
