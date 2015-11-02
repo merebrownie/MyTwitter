@@ -18,6 +18,10 @@ input[type="submit"], input[type="reset"] {
     font-family: Georgia, serif;
     border-radius: 10px;
 }
+
+textarea {
+    width = 800px;
+}
 /* The styles for the classes */
 
 /* The styles for the specific elements (by Id) */
