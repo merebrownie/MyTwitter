@@ -13,46 +13,75 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <script src="includes/main.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <title>MyTwitter | Signup</title>
     </head>
-    <body onload="checkCookie()">
-        <jsp:include page="header.jsp"></jsp:include>
+    <body onload="checkCookie()" class="container-fluid">
+        <div class="row">
+            <div class="navbar navbar-default">
+            <jsp:include page="header.jsp"></jsp:include>
+        </div>
+        </div>
+        
         <h1>Sign-up</h1>
         <form name="signup" method="post" onsubmit="return validateForm()" action="membership">
-            <input type="hidden" name="action" value="signup">
+        <c:choose>
+            <c:when test="${user.getEmailAddress() == null || user.getEmailAddress() == ''}">
+                <input type="hidden" name="action" value="signup">
+            </c:when>
+            <c:otherwise>
+                <input type="hidden" name="action" value="update">
+            </c:otherwise>
+        </c:choose>
             <label>Full Name:</label>
                 <input type="text" name="fullName" value="${user.fullName}" required><br>
             <label>Nickname: </label>
-                <!--<input type="text" name="nickname" value="${user.nickname}" required><br>-->
-                <input type="text" name="nickname" value="${user.nickname}" disabled><br>
+            <c:choose>
+                <c:when test="${user.getEmailAddress() == null || user.getEmailAddress() == ''}">
+                    <input type="text" name="nickname" value="${user.nickname}" required><br>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="nickname" value="${user.nickname}" disabled><br>
+                </c:otherwise>
+            </c:choose>
             <label>E-mail Address: </label>
-                <!--<input type="email" name="emailAddress" value="${user.emailAddress}" required><br>-->
-                <input type="email" name="emailAddress" value="${user.emailAddress}" disabled><br>
+            <c:choose>
+                <c:when test="${user.getEmailAddress() == null || user.getEmailAddress() == ''}">
+                    <input type="email" name="emailAddress" value="${user.emailAddress}" required><br>
+                </c:when>
+                <c:otherwise>
+                    <input type="email" name="emailAddress" value="${user.emailAddress}" disabled><br>
+                </c:otherwise>
+            </c:choose>
+            
+                
             <label>Birthdate: </label>
             <select name="birthmonth" required value="${user.birthmonth}">
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="01" selected>1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
             </select>
             <select name="birthdate" required value="${user.birthdate}">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
@@ -76,7 +105,7 @@
                 <option value="30">30</option>
                 <option value="31">31</option>
             </select>
-            <select name="birthyear" required value="${birthyear}">
+            <select name="birthyear" required value="${user.birthyear}">
                 <option value="1980">1980</option>
                 <option value="1981">1981</option>
                 <option value="1982">1982</option>
@@ -118,7 +147,14 @@
             <label>Password: </label>
                 <input type="password" name="password" value="${user.password}" required><br>
             <input type="reset" name="reset" value="Reset">
-            <input type="submit" name="submit" value="Submit" onsubmit="validateForm()">
+            <c:choose>
+                <c:when test="${user.getEmailAddress() == null || user.getEmailAddress() == ''}">
+                    <input type="submit" name="submit" value="Submit" onsubmit="validateForm()">
+                </c:when>
+                <c:otherwise>
+                    <input type="submit" name="update" value="Update" onsubmit="validateForm()">
+                </c:otherwise>
+            </c:choose>
         </form>
                 <!--<c:if test="${message != null}">
                     <p><i>${message}</i></p>

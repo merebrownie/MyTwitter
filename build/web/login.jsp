@@ -1,7 +1,7 @@
 <%-- 
     Document   : login.jsp
     Created on : Sep 24, 2015, 6:44:58 PM
-    Author     : xl
+    Author     : nb
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -10,13 +10,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <script src="includes/main.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <title>MyTwitter | Login</title>
     </head>
     <body>
-        <jsp:include page="header.jsp"></jsp:include>
+        <div class="navbar navbar-default">
+            <jsp:include page="header.jsp"></jsp:include>
+        </div>
         <h1>Log in</h1>
         <div id="message"></div>
         <form name="login" action="membership" method="post" >

@@ -1,7 +1,7 @@
 <%-- 
     Document   : home.jsp
     Created on : Sep 24, 2015, 6:47:02 PM
-    Author     : xl
+    Author     : mb
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,17 +9,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="styles/main.css" rel="stylesheet" type="text/css"/>
+        <!--<link href="styles/main.css" rel="stylesheet" type="text/css"/>-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="includes/main.js" type="text/javascript"></script>
+        <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <title>MyTwitter | Home</title>
     </head>
     <body onload="changeColor()">
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <div class="container-fluid">
             <div class="row">
                 <div class="navbar navbar-default">
@@ -47,7 +47,7 @@
                     <h3>Who to follow</h3>
                     <c:forEach var="user" items="${users}">
                         <c:out value="${user.fullName}"></c:out>
-                        [@<c:out value="${user.nickname}"></c:out>]
+                        [@<c:out value="${user.nickname}"></c:out>]<br>
                     </c:forEach>
                 </aside>
             </div>

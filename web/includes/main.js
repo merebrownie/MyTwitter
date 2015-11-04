@@ -3,19 +3,14 @@
  */
 
 function changeColor() {
-    alert("looking..");
     var tweet;
     var tweets = document.getElementsByClassName("tweet");
-    alert(tweets.length);
     for(i = 0; i < tweets.length; i++) {
         tweet = tweets.item(i);
-        alert(tweet);
         var startMention = tweets.indexOf("@") + 1;
         var endMention = tweets.indexOf(" ", startMention);
-        alert(startMention + "" + endMention);
         var textToChange = tweet.substring(startMention, endMention);
         textToChange.style.color = "blue";
-        alert(textToChange);
     }
     
 }
@@ -28,8 +23,6 @@ function checkCookie() {
 
 function checkPassword() {
     alert("Checking password.");
-    //if(document.cookie.test(document.login.password.value) || password == 
-            //document.login.emailAddress.value) {
     if(document.cookie.indexOf(document.login.email.value) > 0) {
         alert(document.cookie + "" + document.login.email.value);
         if(document.cookie.indexOf(document.login.password.value) > 0) {
@@ -54,8 +47,6 @@ function validateForm() {
     var birthdate = document.signup.birthdate.value;
     var birthyear = document.signup.birthyear.value;
     if(password.length < 7) {
-        //alert("Password must be 7 characters long.");
-        //return false;
         message += "Password must be at least 7 characters long. ";
     }
     if(birthmonth == "2") {
