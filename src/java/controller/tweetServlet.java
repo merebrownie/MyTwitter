@@ -14,6 +14,7 @@ import javax.servlet.http.*;
 
 import business.Tweet;
 import dataaccess.TweetDB;
+import java.util.UUID;
 /**
  *
  * @author meredithbrowne
@@ -66,25 +67,29 @@ public class tweetServlet extends HttpServlet {
             
         } else if (action.equals("postTweet")) {
             // get tweet data from the form
-            String emailAddress = request.getParameter("emailAddress");
+            String userID = request.getParameter("userID");
             String text = request.getParameter("text");
             
             // get current date
-            Date currentDate = new Date();
-            String date = currentDate.toString();
-                        
+            //Date currentDate = new Date();
+            //String date = currentDate.toString();
+            
             // store data in a tweet object and save to file
-            Tweet tweet = new Tweet(emailAddress, date, text);
-            String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
-            TweetDB.insert(tweet, path);
+            Tweet tweet = new Tweet();
+            System.out.println("Timestamp: " + tweet.getTimestamp() + "TweetID " + tweet.getTweetID());
+            tweet.setUserID(userID);
+            tweet.setText(text);
+            //tweet.setDate(date);
+            //String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
+            TweetDB.insert(tweet);
             
             //set Tweet object in request object and set URL
             request.setAttribute("tweet", tweet);
             url = "/home.jsp";
             }
         // create tweets list & store it in the session
-        String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
-        ArrayList<Tweet> tweets = TweetDB.search(path);
+        //String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
+        ArrayList<Tweet> tweets = TweetDB.selectTweets();
         HttpSession session = request.getSession();
         session.setAttribute("tweets", tweets);
         

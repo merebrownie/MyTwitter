@@ -23,7 +23,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="navbar navbar-default">
-                <jsp:include page="header.jsp"></jsp:include>
+                    <jsp:include page="header.jsp"></jsp:include>
                 </div>
             </div>
             <div class="row">
@@ -37,7 +37,7 @@
                 <section id="postTweet" class="col-md-6">
                     <form id="postTweet" action="tweet">
                         <input type="hidden" name="action" value="postTweet">
-                        <input type="hidden" name="emailAddress" value="${user.emailAddress}">
+                        <input type="hidden" name="userID" value="${user.userID}">
                         <textarea rows="4" cols="50" maxlength="200" name="text" value="${tweet.text}" required></textarea><br>
                         <input type="submit" value="Tweet">
                     </form>
@@ -63,7 +63,7 @@
                                 <td><c:out value="${user.fullName}"></c:out></td>
                             </tr>
                             <tr>
-                                <td>@<c:out value="${user.nickname}"></c:out>: <c:out value="${tweet.date}"></c:out></td>
+                                <td>@<c:out value="${user.nickname}"></c:out>: <c:out value="${tweet.timestamp}"></c:out></td>
                             </tr>
                             <tr>
                                 <td class="tweet"><c:out value="${tweet.text}"></c:out></td>
@@ -84,8 +84,9 @@
         </section>
 
         
-        
-        <jsp:include page="footer.jsp"></jsp:include>
+        <footer class="row">
+            <jsp:include page="footer.jsp"></jsp:include>
+        </footer>
         </div>
     </body>
 </html>

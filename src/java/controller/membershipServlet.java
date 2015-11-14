@@ -64,18 +64,25 @@ public class membershipServlet extends HttpServlet {
         String action = request.getParameter("action");
         // perform action and set url to appropriate page
         String url = "";
-        if (action.equals("login")) {
-            url = login(request, response);
-        } else if (action.equals("signup")) {
-            url = signup(request, response);
-        } else if (action.equals("update")) {
-            url = update(request, response);
+        switch (action) {
+            case "login":
+                url = login(request, response);
+                break;
+            case "signup":
+                url = signup(request, response);
+                break;
+            case "update":
+                url = update(request, response);
+                break;
+            case "logout":
+                url = logout(request, response);
+            default:
         }
         System.out.println(url);
         
         //create users list and store it in the session
         String path = getServletContext().getRealPath("/WEB-INF/database.txt");
-        ArrayList<User> users = UserDB.selectAll(path);
+        ArrayList<User> users = UserDB.selectAll();
         HttpSession session = request.getSession();
         session.setAttribute("users", users);
 
@@ -102,15 +109,15 @@ public class membershipServlet extends HttpServlet {
             // Get the path of the database.txt file
             String path = getServletContext().getRealPath("/WEB-INF/database.txt");
             // Select the user object
-            user = UserDB.select(emailAddress, path);
+            user = UserDB.select(emailAddress);
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(-1);
-            if(checkCredentials(user, emailAddress, password)) {
+            //if(checkCredentials(user, emailAddress, password)) {
                 url = "/home.jsp";
-            } else {
-                message = "No user found. Username/Password is incorrect.";
-                url = "/login.jsp";
-            }
+            //} else {
+                //message = "No user found. Username/Password is incorrect.";
+                //url = "/login.jsp";
+            //}
             request.setAttribute("message", message);
         }
         else {
@@ -130,20 +137,27 @@ public class membershipServlet extends HttpServlet {
         String birthyear = request.getParameter("birthyear");
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
+        String profilePicture = request.getParameter("profilePicture");
+        
+        //generate random userID
+        UUID userID = UUID.randomUUID();
         
         //store the data in a user object
         User user = new User();
         user.setEmailAddress(emailAddress);
+        user.setUserID(userID.toString());
         user.setPassword(password);
         user.setFullName(fullName);
         user.setBirthmonth(birthmonth);
         user.setBirthdate(birthdate);
         user.setBirthyear(birthyear);
+        //user.setBirthday(birthdate);
         user.setNickname(nickname);
+        user.setProfilePicture(profilePicture);
         
         // save user data to file if the user doesn't already exist
-        String path = getServletContext().getRealPath("/WEB-INF/database.txt");
-        UserDB.insert(user, path);
+        //String path = getServletContext().getRealPath("/WEB-INF/database.txt");
+        UserDB.insert(user);
         String message = "";
                
         // store the user object as a session attribute
@@ -181,27 +195,32 @@ public class membershipServlet extends HttpServlet {
         
         HttpSession session = request.getSession();
         // Get user object if it exists
-        User user = (User) session.getAttribute("user");
-        
         String newPassword = request.getParameter("password");
         String newFullName = request.getParameter("fullName");
         String newBirthmonth = request.getParameter("birthmonth");
         String newBirthdate = request.getParameter("birthdate");
-        String newBirthyear = request.getParameter("birthyear");        
+        String newBirthyear = request.getParameter("birthyear");
+        String newProfilePicture = request.getParameter("profilePicture");
 
         
         // save data to file
-        String path = getServletContext().getRealPath("/WEB-INF/database.txt");
-        UserDB.update(user, path, newPassword, newFullName, newBirthmonth, newBirthdate, newBirthyear);
+        //String path = getServletContext().getRealPath("/WEB-INF/database.txt");
+        /*UserDB.update(user, path, newPassword, newFullName, newBirthmonth, 
+                newBirthdate, newBirthyear, newProfilePicture);*/
         
+        User user = (User) session.getAttribute("user");
         user.setPassword(newPassword);
         user.setFullName(newFullName);
         user.setBirthmonth(newBirthmonth);
         user.setBirthdate(newBirthdate);
         user.setBirthyear(newBirthyear);
+        user.setProfilePicture(newProfilePicture);
+        UserDB.update(user);
         
         // store the user object as a session attribute
         session.setAttribute("user", user);
+        ArrayList<User> users = UserDB.selectAll();
+        request.setAttribute("users", users);
         
         // add a cookie that stores the user's email & password to the browser
         Cookie emailCookie = new Cookie("emailAddress", user.getEmailAddress());
@@ -216,7 +235,7 @@ public class membershipServlet extends HttpServlet {
         return "/home.jsp";
     }
     
-    public boolean checkCredentials(User user, String emailAddress, String password) {
+    /*public boolean checkCredentials(User user, String emailAddress, String password) {
         if(user.getEmailAddress().equalsIgnoreCase(emailAddress)) {
             if(user.getPassword().equals(password)) {
             System.out.println("Correct credentials. Logging in...");
@@ -230,9 +249,12 @@ public class membershipServlet extends HttpServlet {
             System.out.println("Incorrect email address.");
             return false;
         }
-    }
+    }*/
         
-    
+    private String logout(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
     /**
      * Returns a short description of the servlet.
@@ -244,4 +266,5 @@ public class membershipServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
 }
