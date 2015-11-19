@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import business.Tweet;
+import business.Tweet;
 import dataaccess.TweetDB;
 import java.util.UUID;
 /**
@@ -59,45 +60,42 @@ public class tweetServlet extends HttpServlet {
         
         // get current action
         String action = request.getParameter("action");
-        if (action.equals("null")) {
-            action = "showTweets"; // default action
+        String url = "";
+        switch (action) {
+            case "null":
+                action = "showTweets"; // default action
+                break;
+            case "showTweets":
+                break;
+            case "postTweet":
+                url = postTweet(request, response);
+                break;
+            default:
         }
-        String url ="/home.jsp";
-        if (action.equals("showTweets")) {
-            
-        } else if (action.equals("postTweet")) {
-            // get tweet data from the form
-            String userID = request.getParameter("userID");
-            String text = request.getParameter("text");
-            
-            // get current date
-            //Date currentDate = new Date();
-            //String date = currentDate.toString();
-            
-            // store data in a tweet object and save to file
-            Tweet tweet = new Tweet();
-            System.out.println("Timestamp: " + tweet.getTimestamp() + "TweetID " + tweet.getTweetID());
-            tweet.setUserID(userID);
-            tweet.setText(text);
-            //tweet.setDate(date);
-            //String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
-            TweetDB.insert(tweet);
-            
-            //set Tweet object in request object and set URL
-            request.setAttribute("tweet", tweet);
-            url = "/home.jsp";
-            }
         // create tweets list & store it in the session
-        //String path = getServletContext().getRealPath("/WEB-INF/tweet.txt");
         ArrayList<Tweet> tweets = TweetDB.selectTweets();
         HttpSession session = request.getSession();
         session.setAttribute("tweets", tweets);
+        //System.out.println("Tweets: " + tweets);
         
         // forward request and response objects to url
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
     }
-    
-    
+
+    private String postTweet(HttpServletRequest request, HttpServletResponse response) {
+        // get tweet data from the form
+        String userID = request.getParameter("userID");
+        String text = request.getParameter("text");
+        // store data in a tweet object and save to file
+        Tweet tweet = new Tweet();
+        //System.out.println("Timestamp: " + tweet.getTimestamp() + "TweetID " + tweet.getTweetID());
+        tweet.setUserID(userID);
+        tweet.setText(text);
+        TweetDB.insert(tweet);
+        //set Tweet object in request object and set URL
+        request.setAttribute("tweet", tweet);
+        return "/home.jsp";
+    }
 }

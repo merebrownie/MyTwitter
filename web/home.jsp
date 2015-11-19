@@ -12,6 +12,7 @@
         <!--<link href="styles/main.css" rel="stylesheet" type="text/css"/>-->
         <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="styles/normalize.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -27,7 +28,7 @@
                 </div>
             </div>
             <div class="row">
-                <aside id="userInfo" class="col-md-3 panel">
+                <aside class="userInfo col-xs-12 col-md-3">
                     <table>
                         <tr>
                             <td rowspan="3"><img class="thumbnail profile-pic" src="<c:url value='/profilePictures/${user.profilePicture}'/>"></td>
@@ -42,7 +43,7 @@
                     </table>
                 </aside>
                         
-                <section id="postTweet" class="col-md-6">
+                <section id="tweetBox" class="col-xs-12 col-md-6">
                     <form id="postTweet" action="tweet">
                         <input type="hidden" name="action" value="postTweet">
                         <input type="hidden" name="userID" value="${user.userID}">
@@ -51,7 +52,7 @@
                     </form>
                 </section>
                     
-                <aside id="follow"class ="col-md-3 panel">
+                <aside id="follow" class ="col-xs-12 col-md-3">
                     <h3>Who to follow</h3>
                     <c:forEach var="user" items="${users}">
                         <table>
@@ -68,10 +69,10 @@
                 </aside>
             </div>
             <div class="row">
-                <section id="trends" class="col-md-3">
+                <section id="trends" class="col-xs-12 col-md-3">
                     <h3>Trends</h3>
                 </section>
-                <section id="tweets" class="col-md-6">
+                <section id="tweets" class="col-xs-12 col-md-6" onload="changeColor()">
                     <h3>Tweets</h3>
                     <c:forEach var="tweet" items="${tweets}">
                         <table class="panel">
@@ -84,23 +85,14 @@
                             </tr>
                         </table>
                     </c:forEach>
+                </section>
+                <section id="tbd" class="col-xs-12 col-md-3">
                     
                 </section>
-                <section id="tbd" class="col-md-3"></section>
             </div>
-
-            
-            
-        </section>
-            
-        <section id="right" class="col-md-4">
-            
-        </section>
-
-        
-        <footer class="row">
+            <footer class="row">
                 <jsp:include page="footer.jsp"></jsp:include>
-        </footer>
+            </footer>
         </div>
     </body>
 </html>

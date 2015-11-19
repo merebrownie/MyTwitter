@@ -13,6 +13,7 @@
         <!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
         <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="styles/normalize.css" rel="stylesheet" type="text/css"/>
         <link href="styles/main.css" rel="stylesheet" type="text/css"/>
         <script src="includes/main.js" type="text/javascript"></script>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -30,16 +31,14 @@
             <input type="hidden" name="action" value="login">
             <input type="email" name="emailAddress" value="${user.emailAddress}" placeholder="email or username" required><br>
             <input type="password" name="password" value="${user.password}" placeholder="password" required><br>
-            <!--<input type="email" name="email" placeholder="email or username" required><br>
-            <input type="password" name="password" placeholder="password" required><br>-->
-            <input type="submit" value="Log in" onsubmit="return checkPassword()">
+            <button type="submit" class="btn btn-default" value="Log in" onsubmit="return checkPassword()">Log in</button>
             <input type="checkbox" name="remember" value="remember"><label>Remember me</label>
             <a href="forgotpassword.jsp">Forgot password?</a>
         </form>
         <section id="message">${message}</section>
-        <section id="new">
-            <p>New? <a href="signup.jsp">Sign-up now >></a></p>
-        </section>
+        <div>
+            <br><p class="lead">New? <a href="signup.jsp">Sign-up now >></a></p>
+        </div>
         
         <jsp:include page="footer.jsp"></jsp:include>
     </body>

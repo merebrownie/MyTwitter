@@ -7,7 +7,7 @@ body {
     font-family: Georgia, serif;
 }
 
-input[type="submit"], input[type="reset"] {
+/*input[type="submit"], input[type="reset"] {
     background-color: #0099ff;
     color: #ffffff;
     height: 40px;
@@ -17,31 +17,28 @@ input[type="submit"], input[type="reset"] {
     font-size: 16px;
     font-family: Georgia, serif;
     border-radius: 10px;
-}
+}*/
 
 /* The styles for the classes */
 
 /* The styles for the specific elements (by Id) */
+
 #new {
     background-color: #cccccc;
     height: 3em;
     padding: .5em;
 }
 
-#footer {
-    /*background-color: #cccccc;*/
-    /*height: 50px;
-    font-size: 14px;
+#logout {
     position: absolute;
-    bottom: 5px;
-    width: 600px;
-    padding: 5px;*/
+    right: 0;
+    top: 0;
 }
 
 /* sticky footer styles */
 html {
     position: relative;
-    min-height: 100%
+    min-height: 100%;
 }
 
 body {
@@ -49,6 +46,7 @@ body {
     margin-bottom: 60px;
 }
 
+/* sticky footer */
 .footer {
     position: absolute;
     bottom: 0;
@@ -56,4 +54,35 @@ body {
     /* set the fixed height of the footer */
     height: 60px;
     background-color: #f5f5f5;
+}
+
+/* profile pictures */
+.thumbnail {
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin: 2px;
+}
+
+thumbnail img {
+    width: 50px;
+    height: 50px;
+}
+
+.profile-pic {
+    width: 80px;
+    height: 80px;
+}
+
+#content {
+    padding-bottom: 60px;
+}
+
+#tweetBox {
+    background-color: #E5F2F7;
+}
+
+#postTweet button {
+    position: absolute;
+    right: 0;
 }

@@ -17,7 +17,10 @@ public class Tweet implements Serializable {
     //defines attributes tweetID, emailAddress, date, text
     private String tweetID;
     private String userID;
-    //private java.sql.Date date;
+    private String fullName;
+    private String nickname;
+    private String emailAddress;
+    private String profilePicture;
     private Timestamp timestamp;
     private String text;
     
@@ -25,16 +28,14 @@ public class Tweet implements Serializable {
         //tweetID = "";
         userID = "";
         text = "";
-        
+        fullName = "";
+        nickname = "";
+        emailAddress = "";
+        profilePicture = "";
         //set date
-        //java.util.Date udate = new java.util.Date();
-        //java.sql.Date date = new java.sql.Date(udate.getTime());
         Calendar calendar = new GregorianCalendar();
         timestamp = new Timestamp(calendar.getTimeInMillis());
-        //date = new java.sql.Date(calendar.getTimeInMillis());
-        //System.out.println("udate: " + udate + " udate.getTime()" + udate.getTime());
         System.out.println("calendar: " + calendar + " calendar.getTimeInMillis()" + calendar.getTimeInMillis());
-        //System.out.println("date: " + date);
         System.out.println("timestamp: " + timestamp);
         
         //generate random tweetID
@@ -59,24 +60,6 @@ public class Tweet implements Serializable {
         this.userID = userID;
     }
     
-    /*public String getEmailAddress() {
-        return emailAddress;
-    }
-    
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }*/
-    
-    /*public java.sql.Date getDate() {
-        return date;
-    }
-    
-    public void setDate(java.sql.Date date) {
-        //java.util.Date udate = new java.util.Date();
-        Calendar calendar = new GregorianCalendar();
-        date = new java.sql.Date(calendar.getTimeInMillis());
-        this.date = date;
-    }*/
     
     public Timestamp getTimestamp() {
         return timestamp;
@@ -94,6 +77,38 @@ public class Tweet implements Serializable {
     
     public void setText(String text) {
         this.text = text;
+    }
+    
+    public String getFullName() {
+        return fullName;
+    }
+    
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
+    public String getNickname() {
+        return nickname;
+    }
+    
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+    
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+    
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+    
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }
 

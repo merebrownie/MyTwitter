@@ -6,6 +6,7 @@
 package dataaccess;
 
 import business.Tweet;
+import business.User;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
@@ -40,43 +41,34 @@ public class TweetDB {
             DBUtil.closePreparedStatement(ps);
             pool.freeConnection(connection);
         }
-        
-        // insert data into file "tweet.txt"
-        /*try {
-            File file = new File(filepath);
-            PrintWriter out = new PrintWriter(new FileWriter(file, true));
-            
-            out.println(tweet.getTweetID() + "|" + tweet.getEmailAddress() + 
-                    "|" + tweet.getDate() + "|" + tweet.getText());
-            out.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }*/
     }
     
-    public static ArrayList<Tweet> selectTweets() {
+    public static ArrayList<Tweet> selectTweets() throws IOException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        String query = "SELECT * FROM twitterdb.twit";
+        String query = "SELECT twitID, userID, twitText, twitDate, fullName, "
+                + "nickname, emailAddress, profilePicture FROM twitterdb.vwtwit";
         try {
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
-            ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+            ArrayList<Tweet> tweets = new ArrayList<>();
             while (rs.next()) {
                 Tweet tweet = new Tweet();
                 tweet.setTweetID(rs.getString("twitID"));
                 tweet.setUserID(rs.getString("userID"));
                 tweet.setText(rs.getString("twitText"));
                 tweet.setTimestamp(rs.getTimestamp("twitDate"));
+                tweet.setFullName(rs.getString("fullName"));
+                tweet.setNickname(rs.getString("nickname"));
+                tweet.setEmailAddress(rs.getString("emailAddress"));
+                tweet.setProfilePicture(rs.getString("profilePicture"));
                 tweets.add(tweet);
             }
             System.out.println("prepared string: " + ps);
-            System.out.println("result set: " + rs);
+            System.out.println("result set: " + rs.toString());
             return tweets;
         } catch (SQLException e) {
             System.out.println(e);
@@ -87,27 +79,4 @@ public class TweetDB {
             pool.freeConnection(connection);
         }
     }
-        
-        //File file = new File(filepath);
-        //BufferedReader in = new BufferedReader(new FileReader(file));
-            
-            
-        /*String line = in.readLine();
-        while(line != null) {
-            try {
-                StringTokenizer t = new StringTokenizer(line, "|");
-                String tweetID = t.nextToken();
-                String emailAddress = t.nextToken();
-                String date = t.nextToken();
-                String text = t.nextToken();
-                Tweet tweet = new Tweet(tweetID, emailAddress, date, text);
-                tweets.add(tweet);
-                line = in.readLine();
-            } catch (NoSuchElementException e) {
-                line = in.readLine();
-            }
-        }
-        in.close();
-        return tweets;
-    }*/
 }

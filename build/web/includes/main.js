@@ -3,15 +3,20 @@
  */
 
 function changeColor() {
-    var tweet;
+    /*var tweet;
     var tweets = document.getElementsByClassName("tweet");
+    alert(tweets);
     for(i = 0; i < tweets.length; i++) {
-        tweet = tweets.item(i);
-        var startMention = tweets.indexOf("@") + 1;
-        var endMention = tweets.indexOf(" ", startMention);
-        var textToChange = tweet.substring(startMention, endMention);
+        tweet.prototype = tweets.item(i);
+        
+        var startMention = tweet.prototype.indexOf("@") + 1;
+        var endMention = tweet.prototype.indexOf(" ", startMention);
+        //alert("Start: " + startMention + " End: " + endMention);
+        var textToChange = tweet.prototype.substring(startMention, endMention);
         textToChange.style.color = "blue";
-    }
+        
+        //return tweet.prototype.replace()
+    }*/
     
 }
 

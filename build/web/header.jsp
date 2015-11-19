@@ -20,6 +20,9 @@
         <a href="home.jsp">Home</a> | 
         Notifications | 
         <a href="signup.jsp">Profile</a>
-        <span id="logout" onclick="logout()">Logout</span>
+        <form method="post" action="membership">
+            <input type="hidden" name="action" value="logout" />
+            <button type="submit" class="btn btn-default" id="logout" value="Logout">Logout</button>
+        </form>
     </body>
 </html>

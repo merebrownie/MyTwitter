@@ -13,14 +13,21 @@ import java.util.*;
 
 import business.User;
 import dataaccess.UserDB;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import javax.servlet.annotation.MultipartConfig;
 
 /**
  *
  * @author mb
  */
 @WebServlet(name = "membershipServlet", urlPatterns = {"/membership"})
+@MultipartConfig(fileSizeThreshold=1024*1024*2, //2mb
+                maxFileSize=1024*1024*10,       //10mb
+                maxRequestSize=1024*1024*50)    //50mb
 public class membershipServlet extends HttpServlet {
-
+    // directory to save profile picture files
+    private static final String SAVE_DIR = "profilePictures";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -78,15 +85,13 @@ public class membershipServlet extends HttpServlet {
                 url = logout(request, response);
             default:
         }
-        System.out.println(url);
         
-        //create users list and store it in the session
-        String path = getServletContext().getRealPath("/WEB-INF/database.txt");
+        // create users list and store it in the session
         ArrayList<User> users = UserDB.selectAll();
         HttpSession session = request.getSession();
         session.setAttribute("users", users);
 
-        //forward to the view
+        // forward to the view
         getServletContext()
             .getRequestDispatcher(url)
             .forward(request, response);
@@ -106,8 +111,6 @@ public class membershipServlet extends HttpServlet {
         String message = "";
         // If the user does not already exist
         if(user == null) {
-            // Get the path of the database.txt file
-            String path = getServletContext().getRealPath("/WEB-INF/database.txt");
             // Select the user object
             user = UserDB.select(emailAddress);
             session.setAttribute("user", user);
@@ -127,7 +130,7 @@ public class membershipServlet extends HttpServlet {
     }
     
     private String signup(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
         
         //get user data
         String emailAddress = request.getParameter("emailAddress");
@@ -138,6 +141,9 @@ public class membershipServlet extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         String profilePicture = request.getParameter("profilePicture");
+        System.out.println("filename: " + profilePicture);
+        
+        profilePicture = addProfilePicture(request, profilePicture);
         
         //generate random userID
         UUID userID = UUID.randomUUID();
@@ -151,12 +157,10 @@ public class membershipServlet extends HttpServlet {
         user.setBirthmonth(birthmonth);
         user.setBirthdate(birthdate);
         user.setBirthyear(birthyear);
-        //user.setBirthday(birthdate);
         user.setNickname(nickname);
         user.setProfilePicture(profilePicture);
         
         // save user data to file if the user doesn't already exist
-        //String path = getServletContext().getRealPath("/WEB-INF/database.txt");
         UserDB.insert(user);
         String message = "";
                
@@ -191,24 +195,20 @@ public class membershipServlet extends HttpServlet {
     }
     
     private String update(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException{
-        
+            throws IOException, ServletException{
         HttpSession session = request.getSession();
         // Get user object if it exists
+        User user = (User) session.getAttribute("user");
         String newPassword = request.getParameter("password");
         String newFullName = request.getParameter("fullName");
         String newBirthmonth = request.getParameter("birthmonth");
         String newBirthdate = request.getParameter("birthdate");
         String newBirthyear = request.getParameter("birthyear");
         String newProfilePicture = request.getParameter("profilePicture");
-
+        System.out.println("Profile Picture: " + newProfilePicture);
         
-        // save data to file
-        //String path = getServletContext().getRealPath("/WEB-INF/database.txt");
-        /*UserDB.update(user, path, newPassword, newFullName, newBirthmonth, 
-                newBirthdate, newBirthyear, newProfilePicture);*/
+        newProfilePicture = addProfilePicture(request, newProfilePicture);
         
-        User user = (User) session.getAttribute("user");
         user.setPassword(newPassword);
         user.setFullName(newFullName);
         user.setBirthmonth(newBirthmonth);
@@ -251,8 +251,16 @@ public class membershipServlet extends HttpServlet {
         }
     }*/
         
-    private String logout(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            System.out.println("Logging out...");
+        }
+        //request.logout();
+        
+        return "/login.jsp";
     }
 
     
@@ -265,6 +273,53 @@ public class membershipServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length()-1);
+            }
+        }
+        return "";
+    }
+
+    private String addProfilePicture(HttpServletRequest request, String newProfilePicture) throws IOException, ServletException {
+        // get absolute path of the web app
+        String appPath = request.getServletContext().getRealPath("");
+        // construct directory to save the file
+        String savePath = appPath + SAVE_DIR;
+        System.out.println("App path: " + appPath);
+        System.out.println("Save path: " + savePath);
+                
+        // create save directory if it doesn't already exist
+        File fileSaveDir = new File(savePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdir();
+        }
+        
+        //get the file name & write the file
+        for (Part part : request.getParts()) {
+            // get timestamp to ensure unique filenames
+            Date today = Calendar.getInstance().getTime();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");
+            String timestamp = formatter.format(today);
+            System.out.println("Image timestamp: " + timestamp);
+            
+            String fileName = timestamp + extractFileName(part);
+            
+            //request.setAttribute("profilePicture", fileName);
+            if (extractFileName(part) != "") {
+                part.write(savePath + File.separator + fileName);
+                newProfilePicture = fileName;
+            }
+            System.out.println("newProfilePicture" + newProfilePicture);
+            System.out.println("Filename: " + fileName);
+        }
+        request.setAttribute("message", "Successful upload.");
+        return newProfilePicture;
+    }
 
     
 }
